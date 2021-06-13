@@ -2,11 +2,11 @@
 
 
 
-![20201226213337588](Linux IO模型.assets/20201226213337588.png)
+![20201226213337588](LinuxIO模型.assets/20201226213337588.png)
 
 Linux下，一个应用程序调用操作系统提供的服务，主要的调用接口有如下三种：
 
-![图片](Linux IO模型.assets/20201226212603382.png)
+![图片](LinuxIO模型.assets/20201226212603382.png)
 
 - 直接调用Linux 内核(Kernel) 提供的系统调用(Sys call)接口
 - 调用glibc封装的api，glibc内部会调用kernel
@@ -33,7 +33,7 @@ Linux IO的整个过程中，应用程序与内核之间有不同的交互协作
 阻塞IO，用下图说明：
 
 
-![图片](Linux IO模型.assets/20201226212703232.png)
+![图片](LinuxIO模型.assets/20201226212703232.png)
 
 Application 调用 recv函数，从socket收取网络数据，从调用recv函数开始，Application的线程就立即被挂起，暂停运行，处于阻塞状态。内核收到recv请求后，会先检查socket上是否有数据，如果没有，会继续等待，直至有数据到来。当有数据时，内核会将数据从内核复制到用户空间Application提供的buffer中，完成后 recv 函数返回成功。当recv函数返回后，Application的线程解除阻塞，继续向下执行，处理buffer中收到的数据。
 
@@ -43,7 +43,7 @@ Application 调用 recv函数，从socket收取网络数据，从调用recv函�
 
 非阻塞IO，用下图说明：
 
-![7f6785acbc702b0b4ca4312d2fb1eac6.png](Linux IO模型.assets/7f6785acbc702b0b4ca4312d2fb1eac6.png)
+![7f6785acbc702b0b4ca4312d2fb1eac6.png](LinuxIO模型.assets/7f6785acbc702b0b4ca4312d2fb1eac6.png)
 
 
 
@@ -71,7 +71,7 @@ An asynchronous I/O operation does not cause the requesting process to be blocke
 
 
 
-![2deaf4acad538288cc82529159e686e4.png](Linux IO模型.assets/2deaf4acad538288cc82529159e686e4.png)
+![2deaf4acad538288cc82529159e686e4.png](LinuxIO模型.assets/2deaf4acad538288cc82529159e686e4.png)
 
 当应用程序发出异步IO的请求后，无论内核中数据是否准备好，API函数都会立即返回，应用程序不会被阻塞，而是继续执行其它逻辑代码。当数据到达内核，内核会将数据从内核拷贝到用户空间Application指定的buffer中，拷贝完成后用信号或事件通知应用程序。应用程序在信号处理函数或事件处理函数中获取IO操作的结果，对IO结果数据进行处理。
 
@@ -83,7 +83,7 @@ An asynchronous I/O operation does not cause the requesting process to be blocke
 
 首先为socket安装一个信号处理函数，进程继续运行并不阻塞。当数据准备好时，进程会收到一个SIGIO信号，可以在信号处理函数中调用I/O操作函数处理数据。整个过程如下图所示：
 
-![1118a3d697b9b1ae68b79d09dfed87f1.png](Linux IO模型.assets/1118a3d697b9b1ae68b79d09dfed87f1.png)
+![1118a3d697b9b1ae68b79d09dfed87f1.png](LinuxIO模型.assets/1118a3d697b9b1ae68b79d09dfed87f1.png)
 
 **I/O多路复用 (I/O multiplexing)：**
 
@@ -91,7 +91,7 @@ Linux下IO多路复用，主要指select、poll和epoll。一个线程可以对�
 
 整个过程，用select 表示如下：
 
-![dd8bb0a88a0ce1f32cc5ce7e1fa7ac2e.png](Linux IO模型.assets/dd8bb0a88a0ce1f32cc5ce7e1fa7ac2e.png)
+![dd8bb0a88a0ce1f32cc5ce7e1fa7ac2e.png](LinuxIO模型.assets/dd8bb0a88a0ce1f32cc5ce7e1fa7ac2e.png)
 
 
 
@@ -111,7 +111,7 @@ epoll是Linux特有的I/O多路复用方法，其内部实现采用事件通知�
 
 epoll 中，socket可读或可写的状态变化，叫事件。可以有两种方式，将这些事件通知给应用程序，一种叫水平触发，另一种叫边缘触发。用电平在0和1之间变化的例子，来说明这两种方式：
 
-![d79b9f0a0cd20c6240d35c3132f4526a.png](Linux IO模型.assets/d79b9f0a0cd20c6240d35c3132f4526a.png)
+![d79b9f0a0cd20c6240d35c3132f4526a.png](LinuxIO模型.assets/d79b9f0a0cd20c6240d35c3132f4526a.png)
 
 比如，socket1对应的链路，网络对端发过来了2K数据。这时，socket1的状态就会从不可读变为可读(因为有数据可以被读取了)，无论采用水平触发还是边缘触发模式来监测socket1的读状态变化，都会收到一次事件通知。
 
