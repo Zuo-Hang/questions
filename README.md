@@ -5,7 +5,7 @@
 
 ## 操作系统基础
 
-[linux IO 模型](src/main/resources/Linux/Linux IO模型.md)
+[linux IO 模型](src/main/resources/Linux/Linux_IO模型.md)
 
 ## Java基础
 
