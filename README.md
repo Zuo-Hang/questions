@@ -2,6 +2,11 @@
 
 # 
 总结整理面试中会出现的问题。
+
+## 操作系统基础
+
+[linux IO 模型](src/main/resources/rabbitMQ/rabbitMQ.md)
+
 ## Java基础
 
 语法
